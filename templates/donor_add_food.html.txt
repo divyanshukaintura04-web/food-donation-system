@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Add Donor & Food</h2>
+<form method="post">
+  <input name="name" placeholder="Donor Name"><br>
+  <input name="type" placeholder="Type (Restaurant/Home/Hotel)"><br>
+  <input name="contact" placeholder="Contact"><br>
+  <input name="address" placeholder="Address"><br>
+  <hr>
+  <h4>Optional: Add a food item for this donor</h4>
+  <input name="foodname" placeholder="Food name"><br>
+  <input name="quantity" placeholder="Quantity"><br>
+  <input name="expiry" placeholder="Expiry date"><br>
+  <button type="submit">Add</button>
+</form>
+{% endblock %}

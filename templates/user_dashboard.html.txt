@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Available Food</h2>
+<table>
+  <tr><th>Food</th><th>Qty</th><th>Donor</th><th>Location</th><th>Action</th></tr>
+  {% for item in food %}
+    <tr>
+      <td>{{ item['FoodName'] }}</td>
+      <td>{{ item['Quantity'] }}</td>
+      <td>{{ item['DonorName'] }}</td>
+      <td>{{ item['DonorAddress'] }}</td>
+      <td>
+        <a href="{{ url_for('new_request', food_id=item['FoodID']) }}">Request</a>
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+instance/
+database/food_donation.db
+static/uploads/
+.env
+*.sqlite3
+*.db

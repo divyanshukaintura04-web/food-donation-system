@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Food Donation & Waste Management System</h1>
+<p>Saving Food, Serving Humanity.</p>
+<p>Sign up as NGO or Individual to request food. Donors can be added by Admin or via donor signup page.</p>
+{% endblock %}

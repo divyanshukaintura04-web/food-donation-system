@@ -1,0 +1,10 @@
+body { background:#0f1720; color:#e6eef6; font-family: Arial, sans-serif; }
+.container { padding:20px; max-width:1100px; margin:20px auto; background:#0b1114; border-radius:8px; box-shadow:0 0 20px rgba(0,0,0,0.5); }
+.nav { background:#071022; padding:10px; border-bottom:1px solid #14202a; }
+.nav a { color:#9be7d6; text-decoration:none; margin-right:12px; }
+input, select, textarea { background:#091217; color:#cfeee4; border:1px solid #27343a; padding:8px; width:100%; margin:6px 0; border-radius:4px; }
+button { background:#00c4a7; color:#001; padding:8px 12px; border:none; border-radius:4px; cursor:pointer; }
+table { width:100%; border-collapse:collapse; margin:10px 0; }
+table th, table td { padding:8px; border:1px solid #21303a; text-align:left; }
+.flash.success { background: #063; color:#bfffd6; padding:8px; margin:8px 0; border-radius:4px; }
+.flash.danger { background: #600; color:#ffd6d6; padding:8px; margin:8px 0; border-radius:4px; }

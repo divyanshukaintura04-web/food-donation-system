@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Donors & Food Items</h2>
+<a href="{{ url_for('donor_add') }}">Add Donor & Food</a>
+<h3>Donors</h3>
+<ul>
+  {% for d in donors %}
+    <li>{{ d.Name }} ({{ d.Type }}) - {{ d.ContactNumber }} - {{ d.Address }}</li>
+  {% endfor %}
+</ul>
+<h3>Food Items</h3>
+<table>
+  <tr><th>Name</th><th>Qty</th><th>Expiry</th><th>Donor</th><th>Status</th></tr>
+  {% for f in food %}
+    <tr>
+      <td>{{ f['FoodName'] }}</td>
+      <td>{{ f['Quantity'] }}</td>
+      <td>{{ f['ExpiryDate'] }}</td>
+      <td>{{ f['DonorName'] }}</td>
+      <td>{{ f['Status'] }}</td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Give Feedback for Donor {{ donorid }}</h2>
+<form method="post">
+  <label>Rating (1-5)</label><br>
+  <input name="rating" type="number" min="1" max="5"><br>
+  <textarea name="comments" placeholder="Comments"></textarea><br>
+  <button type="submit">Submit Feedback</button>
+</form>
+{% endblock %}

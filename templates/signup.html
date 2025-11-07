@@ -1,0 +1,17 @@
+﻿{% extends "base.html" %}
+{% block content %}
+  <h2>Signup</h2>
+  <form method="post">
+    <label>User Type</label>
+    <select name="usertype"><option value="Individual">Individual</option><option value="NGO">NGO</option></select><br>
+    <input name="name" placeholder="Full Name"><br>
+    <input name="contact" placeholder="Contact Number"><br>
+    <input name="email" placeholder="Email"><br>
+    <input name="address" placeholder="Address"><br>
+    <input name="proof_type" placeholder="Proof Type (if Individual)"><br>
+    <input name="proof_number" placeholder="Proof Number"><br>
+    <input name="username" placeholder="Username"><br>
+    <input name="password" type="password" placeholder="Password"><br>
+    <button type="submit">Signup</button>
+  </form>
+{% endblock %}

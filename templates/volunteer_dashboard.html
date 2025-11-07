@@ -1,0 +1,17 @@
+﻿{% extends "base.html" %}
+{% block content %}
+  <h2>Volunteer Dashboard</h2>
+  <table>
+    <tr><th>DeliveryID</th><th>ReqID</th><th>Requester</th><th>Proof</th><th>Pickup Time</th><th>Status</th></tr>
+    {% for del in deliveries %}
+      <tr>
+        <td>{{ del.DeliveryID }}</td>
+        <td>{{ del.ReqID }}</td>
+        <td>{{ del.RequesterName }}</td>
+        <td>{% if del.ProofFile %}<a href="{{ url_for('uploaded_file', filename=del.ProofFile) }}" target="_blank">View</a>{% else %}-{% endif %}</td>
+        <td>{{ del.PickupTime }}</td>
+        <td>{{ del.Status }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

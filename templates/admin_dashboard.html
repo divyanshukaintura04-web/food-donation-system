@@ -1,0 +1,23 @@
+﻿{% extends "base.html" %}
+{% block content %}
+  <h2>Admin Dashboard</h2>
+  <h3>Requests</h3>
+  <table>
+    <tr><th>ReqID</th><th>Requester</th><th>Food</th><th>Donor</th><th>Status</th><th>Actions</th></tr>
+    {% for r in requests %}
+      <tr>
+        <td>{{ r.ReqID }}</td>
+        <td>{{ r.Requester }}</td>
+        <td>{{ r.FoodName }}</td>
+        <td>{{ r.DonorName }}</td>
+        <td>{{ r.Status }} / Verified: {{ r.Verified }}</td>
+        <td>
+          <form method="post" action="{{ url_for('admin_approve', reqid=r.ReqID) }}" style="display:inline;">
+            <button name="action" value="approve">Approve</button>
+            <button name="action" value="reject">Reject</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

@@ -1,0 +1,8 @@
+web: gunicorn app:app
+web: : The term 'web:' is not recognized as the name of a cmdlet, function, script file, or operable program. Check
+the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ web: gunicorn app:app
++ ~~~~
+    + CategoryInfo          : ObjectNotFound: (web::String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
