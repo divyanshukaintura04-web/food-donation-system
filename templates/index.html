@@ -1,6 +1,22 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
+{% block title %}Home - Food Donation{% endblock %}
 {% block content %}
-  <h1>Food Donation & Waste Management System</h1>
-  <p>Saving Food, Serving Humanity.</p>
-  <p><a href="/signup">Signup</a> | <a href="/login">Login</a></p>
+<section class="page-section">
+  <img src="{{ url_for('static', filename='images/home_banner.jpg') }}" class="banner">
+  <h2>Welcome to Food Donation & Waste Management System</h2>
+
+  <p>1. The Food Donation & Waste Management System connects donors, NGOs, and needy individuals on one platform.</p>
+  <p>2. It helps reduce food wastage by redistributing excess food from restaurants, homes, and events.</p>
+  <p>3. Users can view available food donations near their location and place a request easily.</p>
+  <p>4. Donors can upload available food details, including type, quantity, and expiry time.</p>
+  <p>5. The system verifies every request through valid proof to ensure genuine distribution.</p>
+  <p>6. Volunteers help deliver food safely from donors to recipients under admin supervision.</p>
+  <p>7. The admin monitors all activities, including donation approvals and deliveries.</p>
+  <p>8. The system promotes transparency and accountability in every donation process.</p>
+  <p>9. It supports the goal of “Zero Hunger” by connecting people who can help with those in need.</p>
+  <p>10. Together, we make sure no food is wasted and no one sleeps hungry.</p>
+
+  <a href="{{ url_for('signup') }}" class="btn">Signup</a>
+  <a href="{{ url_for('login') }}" class="btn">Login</a>
+</section>
 {% endblock %}

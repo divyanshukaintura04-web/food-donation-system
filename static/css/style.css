@@ -1,8 +1,229 @@
-﻿body { background:#0f1720; color:#e6eef6; font-family: Arial, sans-serif; }
-.container { padding:20px; max-width:1100px; margin:20px auto; background:#0b1114; border-radius:8px; }
-nav { background:#071022; padding:10px; }
-nav a { color:#9be7d6; text-decoration:none; margin-right:12px; }
-input, select, textarea { background:#091217; color:#cfeee4; border:1px solid #27343a; padding:8px; width:100%; margin:6px 0; border-radius:4px; }
-button { background:#00c4a7; color:#001; padding:8px 12px; border:none; border-radius:4px; cursor:pointer; }
-table { width:100%; border-collapse:collapse; margin:10px 0; }
-table th, table td { padding:8px; border:1px solid #21303a; text-align:left; }
+/* ===============================
+   Global Styles + Background Setup
+   =============================== */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #222;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Background Image Layer */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("static/images/background.jpg") no-repeat center center fixed;
+  background-size: cover;
+  filter: blur(6px) brightness(0.8);
+  z-index: -1;
+}
+
+/* ===============================
+   Header / Navbar
+   =============================== */
+header {
+  background: rgba(255, 112, 67, 0.9);
+  padding: 15px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 10px 0;
+  margin: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #ffe0b2;
+}
+
+/* ===============================
+   Page Section
+   =============================== */
+.page-section {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  padding: 25px;
+  margin: 50px auto;
+  width: 85%;
+  max-width: 900px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.25);
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
+h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #444;
+  width: 90%;
+  margin: 10px auto 25px;
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+/* ===============================
+   Banners & Images
+   =============================== */
+.banner, .page-img {
+  width: 90%;
+  max-height: 300px;
+  border-radius: 15px;
+  margin: 20px auto;
+  display: block;
+  object-fit: cover;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+/* ===============================
+   Forms
+   =============================== */
+form {
+  margin-top: 15px;
+}
+
+form input, form select, form textarea {
+  width: 70%;
+  max-width: 400px;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+form button {
+  background: #ff7043;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+form button:hover {
+  background: #f4511e;
+}
+
+/* ===============================
+   Tables (Dashboard Lists)
+   =============================== */
+table {
+  border-collapse: collapse;
+  width: 90%;
+  margin: 20px auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+table th {
+  background: #ff7043;
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+table tr:hover {
+  background: #ffe0b2;
+}
+
+/* ===============================
+   Buttons & Links
+   =============================== */
+.btn, a.btn {
+  display: inline-block;
+  background: #ff7043;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover, a.btn:hover {
+  background: #f4511e;
+}
+
+/* ===============================
+   Footer
+   =============================== */
+footer {
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  margin-top: 40px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+}
+
+footer p {
+  margin: 0;
+}
+
+/* ===============================
+   Responsive Design
+   =============================== */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  form input, form select, form textarea {
+    width: 90%;
+  }
+
+  .page-section {
+    width: 95%;
+  }
+}
+

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-section">
+  <h2>Manage Your Donations</h2>
+  <p>Post available food, update quantities, or remove expired items. Your contributions make a difference!</p>
+  <img src="{{ url_for('static', filename='images/ngo.jpg') }}" class="page-img">
+  <a href="{{ url_for('donor_add') }}" class="btn">Add New Donation</a>
+</section>
+{% endblock %}

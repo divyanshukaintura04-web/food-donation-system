@@ -1,17 +1,23 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% block content %}
-  <h2>Signup</h2>
-  <form method="post">
-    <label>User Type</label>
-    <select name="usertype"><option value="Individual">Individual</option><option value="NGO">NGO</option></select><br>
-    <input name="name" placeholder="Full Name"><br>
-    <input name="contact" placeholder="Contact Number"><br>
-    <input name="email" placeholder="Email"><br>
-    <input name="address" placeholder="Address"><br>
-    <input name="proof_type" placeholder="Proof Type (if Individual)"><br>
-    <input name="proof_number" placeholder="Proof Number"><br>
-    <input name="username" placeholder="Username"><br>
-    <input name="password" type="password" placeholder="Password"><br>
+<section class="page-section">
+  <h2>Create an Account</h2>
+  <p>Register as a Donor, NGO, or Individual to participate in food donation and collection.</p>
+  <img src="{{ url_for('static', filename='images/ngo.jpg') }}" class="page-img">
+  <form method="POST">
+    <input type="text" name="name" placeholder="Full Name" required><br>
+    <input type="email" name="email" placeholder="Email" required><br>
+    <input type="text" name="contact" placeholder="Contact Number" required><br>
+    <input type="text" name="address" placeholder="Address" required><br>
+    <select name="usertype" required>
+      <option value="Donor">Donor</option>
+      <option value="NGO">NGO</option>
+      <option value="Individual">Individual</option>
+    </select><br>
+    <input type="text" name="proof_number" placeholder="Proof ID" required><br>
+    <input type="text" name="username" placeholder="Username" required><br>
+    <input type="password" name="password" placeholder="Password" required><br>
     <button type="submit">Signup</button>
   </form>
+</section>
 {% endblock %}

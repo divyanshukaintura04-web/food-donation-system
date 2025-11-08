@@ -5,21 +5,27 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
+# ---------- PATH CONFIGURATION ----------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "database", "food_donation.db")
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# ---------- FLASK CONFIGURATION ----------
 app = Flask(__name__)
 app.secret_key = "replace_with_a_random_secret"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB limit
 
+
+# ---------- DATABASE CONNECTION ----------
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
+
+# ---------- INITIALIZE DATABASE ----------
 def init_db():
     sql_file = os.path.join(BASE_DIR, "database", "schema.sql")
     conn = sqlite3.connect(DB_PATH)
@@ -33,12 +39,17 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 init_db()
 
+
+# ---------- HOME ----------
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
+# ---------- SIGNUP ----------
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -64,6 +75,8 @@ def signup():
             conn.close()
     return render_template('signup.html')
 
+
+# ---------- LOGIN ----------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -71,6 +84,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         conn = get_db_connection()
+
         if role == 'admin':
             admin = conn.execute('SELECT * FROM Admin WHERE Username = ?', (username,)).fetchone()
             conn.close()
@@ -81,6 +95,7 @@ def login():
             else:
                 flash('Invalid admin credentials', 'danger')
                 return redirect(url_for('login'))
+
         else:
             user = conn.execute('SELECT * FROM User WHERE Username = ?', (username,)).fetchone()
             conn.close()
@@ -91,13 +106,57 @@ def login():
                 return redirect(url_for('user_dashboard'))
             else:
                 flash('Invalid credentials', 'danger')
+
     return render_template('login.html')
 
+
+# ---------- LOGOUT ----------
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
 
+
+# ---------- DONOR ----------
+@app.route('/donor/dashboard')
+def donor_dashboard():
+    conn = get_db_connection()
+    donors = conn.execute('SELECT * FROM Donor').fetchall()
+    food = conn.execute('SELECT f.*, d.Name as DonorName FROM FoodItem f LEFT JOIN Donor d ON f.DonorID=d.DonorID').fetchall()
+    conn.close()
+    return render_template('donor_dashboard.html', donors=donors, food=food)
+
+
+@app.route('/donor/add', methods=['GET', 'POST'])
+def donor_add():
+    if request.method == 'POST':
+        name = request.form['name']
+        dtype = request.form['type']
+        contact = request.form['contact']
+        address = request.form['address']
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('INSERT INTO Donor (Name, Type, ContactNumber, Address) VALUES (?,?,?,?)',
+                    (name, dtype, contact, address))
+        donor_id = cur.lastrowid
+
+        # Optional: Add initial food item
+        foodname = request.form.get('foodname')
+        qty = request.form.get('quantity')
+        expiry = request.form.get('expiry')
+        if foodname:
+            conn.execute('INSERT INTO FoodItem (DonorID, FoodName, Quantity, ExpiryDate) VALUES (?,?,?,?)',
+                         (donor_id, foodname, qty or 1, expiry))
+        conn.commit()
+        conn.close()
+        flash('Donor and food added successfully!', 'success')
+        return redirect(url_for('donor_dashboard'))
+
+    return render_template('donor_add_food.html')
+
+
+# ---------- USER DASHBOARD ----------
 @app.route('/user/dashboard')
 def user_dashboard():
     conn = get_db_connection()
@@ -105,13 +164,16 @@ def user_dashboard():
     conn.close()
     return render_template('user_dashboard.html', food=food)
 
-@app.route('/request/new/<int:food_id>', methods=['GET','POST'])
+
+@app.route('/request/new/<int:food_id>', methods=['GET', 'POST'])
 def new_request(food_id):
     if 'user_id' not in session:
         flash("Please login to request", "warning")
         return redirect(url_for('login'))
+
     conn = get_db_connection()
     food = conn.execute('SELECT * FROM FoodItem WHERE FoodID=?', (food_id,)).fetchone()
+
     if request.method == 'POST':
         proof = request.files.get('proof')
         filename = None
@@ -124,13 +186,17 @@ def new_request(food_id):
         conn.close()
         flash('Request submitted. Waiting for admin approval.', 'info')
         return redirect(url_for('user_dashboard'))
+
     conn.close()
     return render_template('request_form.html', food=food)
 
+
+# ---------- ADMIN ----------
 @app.route('/admin/dashboard')
 def admin_dashboard():
     if 'admin_id' not in session:
         return redirect(url_for('login'))
+
     conn = get_db_connection()
     requests = conn.execute('SELECT r.*, u.Name as Requester, f.FoodName, d.Name as DonorName FROM Request r LEFT JOIN User u ON r.UserID=u.UserID LEFT JOIN FoodItem f ON r.FoodID=f.FoodID LEFT JOIN Donor d ON f.DonorID=d.DonorID ORDER BY r.RequestDate DESC').fetchall()
     volunteers = conn.execute('SELECT * FROM Volunteer').fetchall()
@@ -138,6 +204,7 @@ def admin_dashboard():
     donors = conn.execute('SELECT * FROM Donor').fetchall()
     conn.close()
     return render_template('admin_dashboard.html', requests=requests, volunteers=volunteers, users=users, donors=donors)
+
 
 @app.route('/admin/approve/<int:reqid>', methods=['POST'])
 def admin_approve(reqid):
@@ -156,6 +223,7 @@ def admin_approve(reqid):
     conn.close()
     return redirect(url_for('admin_dashboard'))
 
+
 @app.route('/admin/assign_volunteer', methods=['POST'])
 def admin_assign_volunteer():
     if 'admin_id' not in session:
@@ -173,9 +241,10 @@ def admin_assign_volunteer():
     flash("Volunteer assigned and delivery created.", "success")
     return redirect(url_for('admin_dashboard'))
 
+
 @app.route('/admin/add_volunteer', methods=['POST'])
 def admin_add_volunteer():
-    if 'admin_id' not in session():
+    if 'admin_id' not in session:
         return redirect(url_for('login'))
     name = request.form['name']
     contact = request.form['contact']
@@ -187,12 +256,15 @@ def admin_add_volunteer():
     flash('Volunteer added.', 'success')
     return redirect(url_for('admin_dashboard'))
 
+
+# ---------- VOLUNTEER ----------
 @app.route('/volunteer/dashboard')
 def volunteer_dashboard():
     conn = get_db_connection()
     deliveries = conn.execute('SELECT del.*, r.Status as ReqStatus, r.ProofFile, u.Name as RequesterName FROM Delivery del LEFT JOIN Request r ON del.ReqID=r.ReqID LEFT JOIN User u ON r.UserID=u.UserID ORDER BY del.PickupTime DESC').fetchall()
     conn.close()
     return render_template('volunteer_dashboard.html', deliveries=deliveries)
+
 
 @app.route('/volunteer/update/<int:delivery_id>', methods=['POST'])
 def volunteer_update(delivery_id):
@@ -210,23 +282,30 @@ def volunteer_update(delivery_id):
     flash("Delivery status updated.", "success")
     return redirect(url_for('volunteer_dashboard'))
 
-@app.route('/feedback/<int:donorid>', methods=['GET','POST'])
+
+# ---------- FEEDBACK ----------
+@app.route('/feedback/<int:donorid>', methods=['GET', 'POST'])
 def feedback(donorid):
     if request.method == 'POST':
         user_id = session.get('user_id')
         rating = int(request.form['rating'])
         comments = request.form['comments']
         conn = get_db_connection()
-        conn.execute("INSERT INTO Feedback (UserID, DonorID, Rating, Comments, Date) VALUES (?,?,?,?,?)", (user_id, donorid, rating, comments, datetime.utcnow().date().isoformat()))
+        conn.execute("INSERT INTO Feedback (UserID, DonorID, Rating, Comments, Date) VALUES (?,?,?,?,?)",
+                     (user_id, donorid, rating, comments, datetime.utcnow().date().isoformat()))
         conn.commit()
         conn.close()
         flash("Feedback submitted. Thank you!", "success")
         return redirect(url_for('user_dashboard'))
     return render_template('feedback.html', donorid=donorid)
 
+
+# ---------- UPLOADS ----------
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+
+# ---------- RUN APP ----------
 if __name__ == '__main__':
     app.run(debug=True)
