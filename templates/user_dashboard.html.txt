@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Available Food</h2>
-<table>
-  <tr><th>Food</th><th>Qty</th><th>Donor</th><th>Location</th><th>Action</th></tr>
-  {% for item in food %}
+<section class="page-section">
+  <h2>Available Food Donations</h2>
+  <p>Here you can view all nearby food donations and request food for those in need.</p>
+  <img src="{{ url_for('static', filename='images/donate_food.jpg') }}" class="page-img">
+  <table>
+    <tr><th>Food Name</th><th>Quantity</th><th>Expiry Date</th><th>Action</th></tr>
+    {% for f in food %}
     <tr>
-      <td>{{ item['FoodName'] }}</td>
-      <td>{{ item['Quantity'] }}</td>
-      <td>{{ item['DonorName'] }}</td>
-      <td>{{ item['DonorAddress'] }}</td>
-      <td>
-        <a href="{{ url_for('new_request', food_id=item['FoodID']) }}">Request</a>
-      </td>
+      <td>{{ f.FoodName }}</td>
+      <td>{{ f.Quantity }}</td>
+      <td>{{ f.ExpiryDate }}</td>
+      <td><a href="{{ url_for('new_request', food_id=f.FoodID) }}">Request</a></td>
     </tr>
-  {% endfor %}
-</table>
+    {% endfor %}
+  </table>
+</section>
 {% endblock %}

@@ -1,6 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Food Donation & Waste Management System</h1>
+<h1>Food Donation & {% extends "base.html" %}
+{% block content %}
+<section class="page-section">
+  <img src="{{ url_for('static', filename='images/home_banner.jpg') }}" class="banner">
+  <h2>Welcome to Food Donation & Waste Management System</h2>
+  <p>This platform connects donors, NGOs, and individuals to minimize food wastage and feed the needy efficiently.</p>
+  <p>1. Our mission is to bridge the gap between surplus food and hunger.</p>
+  <p>2. Users can donate, request, or manage food distribution easily.</p>
+  <p>3. The system ensures verified and transparent food transactions.</p>
+  <p>4. NGOs and volunteers assist in smooth food delivery.</p>
+  <p>5. Admin monitors requests, donors, and deliveries.</p>
+  <p>6. The system promotes social responsibility and sustainability.</p>
+  <p>7. Built with Flask, HTML, CSS, and SQLite/Postgres.</p>
+  <p>8. Simple interface inspired by Swiggy and Zomato.</p>
+  <p>9. Together, let’s ensure no food goes to waste!</p>
+</section>
+{% endblock %}
+Waste Management System</h1>
 <p>Saving Food, Serving Humanity.</p>
 <p>Sign up as NGO or Individual to request food. Donors can be added by Admin or via donor signup page.</p>
 {% endblock %}

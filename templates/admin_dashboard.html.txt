@@ -1,57 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Admin Dashboard</h2>
-
-<h3>Requests</h3>
-<table>
-  <tr><th>ReqID</th><th>Requester</th><th>Food</th><th>Donor</th><th>Status</th><th>Actions</th></tr>
-  {% for r in requests %}
-    <tr>
-      <td>{{ r['ReqID'] }}</td>
-      <td>{{ r['Requester'] }}</td>
-      <td>{{ r['FoodName'] }}</td>
-      <td>{{ r['DonorName'] }}</td>
-      <td>{{ r['Status'] }} / Verified: {{ r['Verified'] }}</td>
-      <td>
-        <form method="post" action="{{ url_for('admin_approve', reqid=r['ReqID']) }}" style="display:inline;">
-          <button name="action" value="approve">Approve</button>
-          <button name="action" value="reject">Reject</button>
-        </form>
-        <form method="post" action="{{ url_for('admin_assign_volunteer') }}" style="display:inline;">
-          <input type="hidden" name="reqid" value="{{ r['ReqID'] }}">
-          <select name="volid">
-            <option value="">Select Volunteer</option>
-            {% for v in volunteers %}
-              <option value="{{ v['VolID'] }}">{{ v['Name'] }}</option>
-            {% endfor %}
-          </select>
-          <button type="submit">Assign</button>
-        </form>
-      </td>
-    </tr>
-  {% endfor %}
-</table>
-
-<h3>Add Volunteer</h3>
-<form method="post" action="{{ url_for('admin_add_volunteer') }}">
-  <input name="name" placeholder="Name"><br>
-  <input name="contact" placeholder="Contact"><br>
-  <select name="ngoid">
-    <option value="">Select NGO (optional)</option>
-    {% for u in users %}
-      {% if u['UserType'] == 'NGO' %}
-        <option value="{{ u['UserID'] }}">{{ u['Name'] }}</option>
-      {% endif %}
-    {% endfor %}
-  </select><br>
-  <button type="submit">Add Volunteer</button>
-</form>
-
-<h3>Donors</h3>
-<ul>
-  {% for d in donors %}
-    <li>{{ d['Name'] }} - {{ d['Type'] }}</li>
-  {% endfor %}
-</ul>
-
+<section class="page-section">
+  <h2>Admin Dashboard</h2>
+  <p>View and manage requests, approve NGOs, assign volunteers, and track food deliveries.</p>
+  <img src="{{ url_for('static', filename='images/contact_us.jpg') }}" class="page-img">
+</section>
 {% endblock %}
