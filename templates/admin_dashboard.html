@@ -1,8 +1,150 @@
 {% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
 {% block content %}
+
 <section class="page-section">
-  <h2>Admin Dashboard</h2>
-  <p>View and manage requests, approve NGOs, assign volunteers, and track food deliveries.</p>
-  <img src="{{ url_for('static', filename='images/contact_us.jpg') }}" class="page-img">
+  <h1 class="page-title">Admin Dashboard</h1>
+
+  <p class="page-desc">
+    View and manage food requests, approve NGOs, assign volunteers, and track food donations.
+  </p>
+
+  <!-- ADD BUTTONS -->
+  <div class="add-buttons">
+    <a href="{{ url_for('donor_add') }}" class="btn btn-add">🍲 Add Food</a>
+    <a href="#addVolunteer" class="btn btn-add">👷 Add Volunteer</a>
+  </div>
+
+  <!-- FOOD REQUEST TABLE -->
+  <div class="admin-section">
+    <h2>Pending Food Requests</h2>
+    {% if requests %}
+    <table border="1" cellspacing="0" cellpadding="10" class="data-table">
+      <tr>
+        <th>Requester</th>
+        <th>Food Item</th>
+        <th>Donor</th>
+        <th>Proof</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+
+      {% for req in requests %}
+      <tr>
+        <td>{{ req['Requester'] }}</td>
+        <td>{{ req['FoodName'] }}</td>
+        <td>{{ req['DonorName'] }}</td>
+        <td>
+          {% if req['ProofFile'] %}
+          <a href="{{ url_for('uploaded_file', filename=req['ProofFile']) }}" target="_blank">View Proof</a>
+          {% else %}
+          No proof
+          {% endif %}
+        </td>
+        <td>{{ req['Status'] }}</td>
+        <td>
+          {% if req['Status'] == 'Pending' %}
+          <form method="POST" action="{{ url_for('admin_approve', reqid=req['ReqID']) }}" style="display:inline;">
+            <button type="submit" name="action" value="approve" class="btn-approve">Approve ✅</button>
+            <button type="submit" name="action" value="reject" class="btn-reject">Reject ❌</button>
+          </form>
+          {% elif req['Status'] == 'Approved' %}
+          <form method="POST" action="{{ url_for('admin_assign_volunteer') }}">
+            <input type="hidden" name="reqid" value="{{ req['ReqID'] }}">
+            <select name="volid" required>
+              <option value="">Select Volunteer</option>
+              {% for v in volunteers %}
+              <option value="{{ v['VolID'] }}">{{ v['Name'] }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn-assign">Assign</button>
+          </form>
+          {% elif req['Status'] == 'Rejected' %}
+          <span style="color:red;">Rejected</span>
+          {% elif req['Status'] == 'Assigned' %}
+          <span style="color:orange;">Volunteer Assigned</span>
+          {% elif req['Status'] == 'Delivered' %}
+          <span style="color:green;">Delivered</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p>No requests yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- ADD VOLUNTEER -->
+  <div class="admin-section" id="addVolunteer">
+    <h2>Add Volunteer</h2>
+    <form method="POST" action="{{ url_for('admin_add_volunteer') }}">
+      <input type="text" name="name" placeholder="Volunteer Name" required>
+      <input type="text" name="contact" placeholder="Contact Number" required>
+      <input type="text" name="ngoid" placeholder="NGO ID (optional)">
+      <button type="submit" class="btn-add-form">Add Volunteer</button>
+    </form>
+  </div>
+
 </section>
+
+<style>
+  .page-section {
+    width: 90%;
+    margin: 30px auto;
+    padding: 25px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    border-radius: 15px;
+    backdrop-filter: blur(6px);
+  }
+  .page-title {
+    text-align: center;
+    font-size: 32px;
+    color: #ffcc00;
+  }
+  .page-desc {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  .add-buttons {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  .btn {
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-right: 10px;
+    display: inline-block;
+  }
+  .btn-add { background: #007bff; color: white; }
+  .btn-approve, .btn-reject, .btn-assign, .btn-add-form {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .btn-approve { background: #28a745; color: white; }
+  .btn-reject { background: #dc3545; color: white; }
+  .btn-assign { background: #17a2b8; color: white; }
+  .btn-add-form { background: #ffc107; color: black; }
+  table {
+    width: 100%;
+    background: rgba(255,255,255,0.1);
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  th {
+    background: #222;
+    color: #ffcc00;
+  }
+</style>
+
 {% endblock %}

@@ -81,8 +81,9 @@ def signup():
 def login():
     if request.method == 'POST':
         role = request.form.get('role', 'user')
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form.get('username')
+        password = request.form.get('password')
+
         conn = get_db_connection()
 
         if role == 'admin':
@@ -91,11 +92,11 @@ def login():
             if admin and check_password_hash(admin['Password'], password):
                 session['admin_id'] = admin['AdminID']
                 session['admin_username'] = admin['Username']
+                flash('Welcome Admin!', 'success')
                 return redirect(url_for('admin_dashboard'))
             else:
                 flash('Invalid admin credentials', 'danger')
                 return redirect(url_for('login'))
-
         else:
             user = conn.execute('SELECT * FROM User WHERE Username = ?', (username,)).fetchone()
             conn.close()
@@ -103,12 +104,13 @@ def login():
                 session['user_id'] = user['UserID']
                 session['user_type'] = user['UserType']
                 session['username'] = user['Name']
+                flash(f'Welcome {user["Name"]}!', 'success')
                 return redirect(url_for('user_dashboard'))
             else:
-                flash('Invalid credentials', 'danger')
+                flash('Invalid username or password', 'danger')
+                return redirect(url_for('login'))
 
     return render_template('login.html')
-
 
 # ---------- LOGOUT ----------
 @app.route('/logout')

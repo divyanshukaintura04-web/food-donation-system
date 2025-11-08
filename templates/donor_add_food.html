@@ -1,16 +1,60 @@
 {% extends "base.html" %}
+{% block title %}Add Donor & Food{% endblock %}
+
 {% block content %}
-<h2>Add Donor & Food</h2>
-<form method="post">
-  <input name="name" placeholder="Donor Name"><br>
-  <input name="type" placeholder="Type (Restaurant/Home/Hotel)"><br>
-  <input name="contact" placeholder="Contact"><br>
-  <input name="address" placeholder="Address"><br>
-  <hr>
-  <h4>Optional: Add a food item for this donor</h4>
-  <input name="foodname" placeholder="Food name"><br>
-  <input name="quantity" placeholder="Quantity"><br>
-  <input name="expiry" placeholder="Expiry date"><br>
-  <button type="submit">Add</button>
-</form>
+<section class="page-section">
+  <h1>Add Donor and Food Item</h1>
+  <p>Enter the donor’s details and food information to make it available for users.</p>
+
+  <form method="POST">
+    <h3>Donor Details</h3>
+    <input type="text" name="name" placeholder="Donor Name (e.g. Hotel XYZ)" required><br><br>
+    <input type="text" name="type" placeholder="Type (Restaurant, Event, NGO...)" required><br><br>
+    <input type="text" name="contact" placeholder="Contact Number" required><br><br>
+    <input type="text" name="address" placeholder="Address" required><br><br>
+
+    <h3>Food Details</h3>
+    <input type="text" name="foodname" placeholder="Food Name (e.g. Veg Biryani, Roti...)" required><br><br>
+    <input type="number" name="quantity" placeholder="Quantity (No. of packets)" min="1" required><br><br>
+    <label>Expiry Date:</label><br>
+    <input type="date" name="expiry" required><br><br>
+
+    <button type="submit">Add Food</button>
+  </form>
+</section>
+
+<style>
+  .page-section {
+    width: 60%;
+    margin: 50px auto;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(6px);
+  }
+  h1 {
+    text-align: center;
+    color: #ffcc00;
+  }
+  form {
+    text-align: center;
+  }
+  input, select, button {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: none;
+  }
+  button {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #218838;
+  }
+</style>
 {% endblock %}
